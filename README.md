@@ -70,6 +70,3 @@ Para uma experiência mobile otimizada em dispositivos Android, você pode insta
 *   **Login com Google:** Certifique-se de ter uma conta Google para acessar.
 *   **Código de Convite:** Para novos usuários se vincularem a um condomínio, um código de convite é necessário. Este código é distribuído pelo síndico do condomínio. Se você é um morador e não possui um código, entre em contato com a administração do seu condomínio.
 *   **Síndicos:** Se você é um administrador do condomínio, após o primeiro login e registro, seu perfil pode ser configurado com permissões de administrador para gerenciar convites e outras funcionalidades específicas.
-
-
-# TI5-reside
