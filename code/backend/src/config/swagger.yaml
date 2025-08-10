@@ -1,0 +1,1378 @@
+openapi: 3.0.0
+info:
+  title: API Reside
+  version: 1.0.0
+  description: API do Sistema de Gerenciamento de Condomínios Reside
+servers:
+  - url: https://reside-production.up.railway.app
+    description: Servidor de Desenvolvimento Local
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Uma mensagem descritiva do erro.
+          example: 'Token inválido ou expirado.'
+    UploadRulesResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Regras carregadas com sucesso.
+      required:
+        - message
+    ChatRequest:
+      type: object
+      properties:
+        question:
+          type: string
+          example: Qual é o horário de uso da churrasqueira?
+      required:
+        - question
+    ChatResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+          example: A churrasqueira pode ser utilizada das 8h às 22h nos finais de semana.
+      required:
+        - answer
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+        senderId:
+          type: integer
+        receiverId:
+          type: integer
+          nullable: true
+        content:
+          type: string
+        imageUrl:
+          type: string
+          nullable: true
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    BookingRequest:
+      type: object
+      properties:
+        amenityId:
+          type: integer
+          description: ID da área comum a ser reservada.
+          example: 1
+        startTime:
+          type: string
+          format: date-time
+          description: Data e hora de início da reserva no formato ISO 8601.
+          example: "2024-08-10T19:00:00.000Z"
+        endTime:
+          type: string
+          format: date-time
+          description: Data e hora de término da reserva no formato ISO 8601.
+          example: "2024-08-10T22:00:00.000Z"
+      required:
+        - amenityId
+        - startTime
+        - endTime
+    BookingResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 25
+        amenity_id:
+          type: integer
+          example: 1
+        resident_id:
+          type: integer
+          example: 10
+        start_time:
+          type: string
+          format: date-time
+          example: "2024-08-10T19:00:00.000Z"
+        end_time:
+          type: string
+          format: date-time
+          example: "2024-08-10T22:00:00.000Z"
+        status:
+          type: string
+          enum: [confirmed, pending, cancelled]
+          example: "confirmed"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-07-29T14:30:00.000Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-07-29T14:30:00.000Z"
+    Parking:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        resident_id:
+          type: integer
+          example: 5
+        apartment:
+          type: string
+          example: "101A"
+        condominium_id:
+          type: integer
+          example: 1
+        location:
+          type: string
+          example: "Subsolo 1, Vaga 05"
+        type:
+          type: string
+          enum: [diario, mensal]
+          example: "diario"
+        price:
+          type: number
+          format: float
+          example: 25.00
+        description:
+          type: string
+          example: "Vaga de fácil acesso, próxima ao elevador"
+        status:
+          type: string
+          enum: [disponivel, reservado, indisponivel]
+          example: "disponivel"
+        is_covered:
+          type: boolean
+          example: true
+        available_date:
+          type: string
+          format: date
+          example: "2025-06-30"
+        start_time:
+          type: string
+          example: "08:00"
+        end_time:
+          type: string
+          example: "18:00"
+        sunday:
+          type: boolean
+          example: false
+        monday:
+          type: boolean
+          example: true
+        tuesday:
+          type: boolean
+          example: true
+        wednesday:
+          type: boolean
+          example: true
+        thursday:
+          type: boolean
+          example: false
+        friday:
+          type: boolean
+          example: false
+        saturday:
+          type: boolean
+          example: false
+        reserver_id:
+          type: integer
+          nullable: true
+          example: 7
+        reservation_expires_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2025-06-30T18:00:00.000Z"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      
+    ParkingCreateRequest:
+      type: object
+      properties:
+        resident_id:
+          type: integer
+          example: 5
+        apartment:
+          type: string
+          example: "101A"
+        condominium_id:
+          type: integer
+          example: 1
+        location:
+          type: string
+          example: "Subsolo 1, Vaga 05"
+        type:
+          type: string
+          enum: [diario, mensal]
+          example: "diario"
+        price:
+          type: number
+          format: float
+          example: 25.00
+        description:
+          type: string
+          example: "Vaga de fácil acesso, próxima ao elevador"
+        is_covered:
+          type: boolean
+          example: true
+        available_date:
+          type: string
+          format: date
+          example: "2025-06-30"
+        start_time:
+          type: string
+          example: "08:00"
+        end_time:
+          type: string
+          example: "18:00"
+        domingo:
+          type: boolean
+          example: false
+        segunda:
+          type: boolean
+          example: true
+        terca:
+          type: boolean
+          example: true
+        quarta:
+          type: boolean
+          example: true
+        quinta:
+          type: boolean
+          example: false
+        sexta:
+          type: boolean
+          example: false
+        sabado:
+          type: boolean
+          example: false
+      required:
+        - resident_id
+        - apartment
+        - condominium_id
+        - location
+        - type
+        - price
+        - is_covered
+        
+    ParkingRequestBody:
+      type: object
+      properties:
+        resident_id:
+          type: integer
+          example: 7
+      required:
+        - resident_id
+        
+    ParkingRequestResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Solicitação de vaga realizada com sucesso"
+        expiresAt:
+          type: string
+          format: date-time
+          example: "2025-06-30T18:00:00.000Z"
+          
+    ExpiredReservationsResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "2 reservas expiradas foram canceladas"
+        canceledCount:
+          type: integer
+          example: 2
+    
+    ResidentInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        first_name:
+          type: string
+          example: "João"
+        last_name:
+          type: string
+          example: "Silva"
+        email:
+          type: string
+          format: email
+          example: "joao.silva@email.com"
+        apartment:
+          type: string
+          example: "201B"
+        condominium_id:
+          type: integer
+          example: 1
+        role:
+          type: string
+          enum: [user, admin, syndic]
+          example: "user"
+        contact_phone:
+          type: string
+          example: "11987654321"
+    
+    ResidentInfoResponse:
+      type: object
+      properties:
+        resident:
+          $ref: '#/components/schemas/ResidentInfo'
+  
+paths:
+  /bookings:
+    post:
+      tags:
+        - Bookings
+      summary: Cria um novo agendamento para uma área comum
+      description: Permite que um morador autenticado crie uma reserva para uma área comum, validando conflitos de horário.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Dados necessários para criar o agendamento.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Agendamento criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          description: Requisição inválida, como `endTime` anterior ao `startTime`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'End time cannot be before start time.'
+        '401':
+          description: Não autorizado. O token de autenticação não foi fornecido ou é inválido.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Token não fornecido.'
+        '404':
+          description: Morador não encontrado para o usuário autenticado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Resident not found for the authenticated user.'
+        '409':
+          description: Conflito de agendamento. O horário solicitado já está ocupado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Booking conflict: Time slot not available.'
+        '500':
+          description: Erro interno do servidor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /usuarios:
+    get:
+      summary: Retorna todos os usuários
+      responses:
+        '200':
+          description: Lista de usuários retornada com sucesso
+  /condos/{condoId}/rules:
+    post:
+      tags:
+        - Condomínios
+      summary: Upload das regras do condomínio (somente síndico)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: condoId
+          in: path
+          description: ID do condomínio
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+              required:
+                - file
+      responses:
+        '200':
+          description: Regras carregadas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadRulesResponse'
+  /condos/{condoId}/chat:
+    post:
+      tags:
+        - Condomínios
+      summary: Envia pergunta para o chatbot do condomínio (morador)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: condoId
+          in: path
+          description: ID do condomínio
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Resposta do chatbot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+  /invite:
+    post:
+      summary: Envia convites de cadastro para moradores via e-mail
+      description: Recebe uma lista de convites com e-mails e apartamentos, enviando um código de convite por e-mail para cada morador.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                condominium_id:
+                  type: integer
+                  example: 1
+                invites:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      emails:
+                        type: array
+                        items:
+                          type: string
+                          format: email
+                        minItems: 1
+                        example: ["morador1@exemplo.com", "morador2@exemplo.com"]
+                      apartments:
+                        type: array
+                        items:
+                          type: string
+                        minItems: 1
+                        example: ["101", "102"]
+                    required:
+                      - emails
+                      - apartments
+              required:
+                - condominium_id
+                - invites
+      responses:
+        '201':
+          description: Convites gerados e e-mails enviados com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      format: email
+                    apartment:
+                      type: string
+                    status:
+                      type: string
+                      example: "enviado"
+        '400':
+          description: Dados obrigatórios ausentes ou inválidos.
+        '500':
+          description: Erro interno no servidor.
+  /invite/bind:
+    post:
+      summary: Vincula o morador ao condomínio usando o código recebido por e-mail
+      description: Valida o código de convite e cria o cadastro do morador, vinculando ao condomínio.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                invite_code:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                document:
+                  type: string
+                contact_phone:
+                  type: string
+                google_id:
+                  type: string
+              required:
+                - invite_code
+                - first_name
+                - last_name
+                - document
+                - contact_phone
+                - google_id
+      responses:
+        '201':
+          description: Morador cadastrado e vinculado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Código inválido, expirado ou dados ausentes.
+        '500':
+          description: Erro interno no servidor.
+  /messages/residents/{senderId}/condominium-message:
+    post:
+      summary: Envia mensagem para todos os moradores do condomínio (broadcast)
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: senderId
+          required: true
+          schema:
+            type: string
+          description: ID do morador remetente
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Conteúdo da mensagem
+                image:
+                  type: string
+                  format: binary
+                  description: Imagem opcional (JPEG ou PNG, até 5MB)
+              required:
+                - content
+      responses:
+        '201':
+          description: Mensagem enviada para todos os moradores do condomínio
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  messagesSent:
+                    type: integer
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+        '400':
+          description: Conteúdo da mensagem ausente ou imagem inválida
+        '500':
+          description: Erro interno do servidor
+
+  /messages/{messageId}/image:
+    get:
+      summary: Recupera a imagem anexada a uma mensagem
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+          description: ID da mensagem
+      responses:
+        '200':
+          description: Imagem da mensagem retornada com sucesso
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Imagem não encontrada
+        '500':
+          description: Erro ao recuperar a imagem
+
+  /messages/residents/{residentId}/messages:
+    get:
+      summary: Lista todas as mensagens recebidas por um morador
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: residentId
+          required: true
+          schema:
+            type: string
+          description: ID do morador
+      responses:
+        '200':
+          description: Lista de mensagens recebidas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '500':
+          description: Erro interno do servidor
+
+  /messages/residents/{residentId}/messages/unread:
+    get:
+      summary: Lista todas as mensagens não lidas por um morador
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: residentId
+          required: true
+          schema:
+            type: string
+          description: ID do morador
+      responses:
+        '200':
+          description: Lista de mensagens não lidas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '500':
+          description: Erro interno do servidor
+
+  /messages/{messageId}/read:
+    put:
+      summary: Marca uma mensagem como lida
+      tags:
+        - Messages
+      parameters:
+        - in: path
+          name: messageId
+          required: true
+          schema:
+            type: string
+          description: ID da mensagem
+      responses:
+        '200':
+          description: Mensagem marcada como lida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '500':
+          description: Erro interno do servidor
+
+  /condos/{condoId}/rules/latest:
+    get:
+      tags:
+        - Condomínios
+      summary: Retorna dados do último arquivo de regras
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: condoId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Nome e data do arquivo
+        '404':
+          description: Arquivo não encontrado
+        '500':
+          description: Erro interno do servidor
+
+  /parkings:
+    post:
+      tags:
+        - Estacionamento
+      summary: Criar nova vaga de estacionamento
+      description: Permite que um morador disponibilize uma vaga para aluguel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingCreateRequest'
+      responses:
+        '201':
+          description: Vaga criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parking'
+        '400':
+          description: Dados inválidos ou limite de vagas por apartamento excedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+    get:
+      tags:
+        - Estacionamento
+      summary: Listar todas as vagas
+      description: Retorna todas as vagas de estacionamento cadastradas
+      responses:
+        '200':
+          description: Lista de vagas retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+          
+  /parkings/available:
+    get:
+      tags:
+        - Estacionamento
+      summary: Buscar vagas disponíveis
+      description: Busca vagas disponíveis com base em filtros como tipo, data, horário, etc.
+      parameters:
+        - name: condominium_id
+          in: query
+          description: ID do condomínio
+          schema:
+            type: integer
+        - name: location
+          in: query
+          description: Localização da vaga (para busca parcial)
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Tipo de aluguel (diário ou mensal)
+          schema:
+            type: string
+            enum: [diario, mensal]
+        - name: max_price
+          in: query
+          description: Preço máximo
+          schema:
+            type: number
+        - name: is_covered
+          in: query
+          description: Se a vaga é coberta
+          schema:
+            type: boolean
+        - name: date
+          in: query
+          description: Data disponível (para vagas diárias)
+          schema:
+            type: string
+            format: date
+        - name: start_time
+          in: query
+          description: Hora de início (para vagas diárias)
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          description: Hora de fim (para vagas diárias)
+          schema:
+            type: string
+        - name: weekdays
+          in: query
+          description: Dias da semana (para vagas mensais), formato JSON array de booleans
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de vagas disponíveis
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+          
+  /parkings/check-expired:
+    post:
+      tags:
+        - Estacionamento
+      summary: Verificar reservas expiradas
+      description: Verifica e cancela automaticamente reservas que expiraram
+      responses:
+        '200':
+          description: Reservas expiradas verificadas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpiredReservationsResponse'
+        '500':
+          description: Erro interno do servidor
+          
+  /parkings/{id}:
+    get:
+      tags:
+        - Estacionamento
+      summary: Obter detalhes de uma vaga específica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes da vaga
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parking'
+        '400':
+          description: ID inválido
+        '404':
+          description: Vaga não encontrada
+        '500':
+          description: Erro interno do servidor
+          
+    put:
+      tags:
+        - Estacionamento
+      summary: Atualizar uma vaga
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingCreateRequest'
+      responses:
+        '200':
+          description: Vaga atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parking'
+        '400':
+          description: Dados inválidos
+        '404':
+          description: Vaga não encontrada
+          
+    delete:
+      tags:
+        - Estacionamento
+      summary: Remover uma vaga
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Vaga removida com sucesso
+        '400':
+          description: ID inválido
+        '404':
+          description: Vaga não encontrada
+        '500':
+          description: Erro interno do servidor
+          
+  /parkings/{id}/request:
+    post:
+      tags:
+        - Estacionamento
+      summary: Solicitar uma vaga
+      description: Permite que um morador solicite a reserva de uma vaga disponível
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingRequestBody'
+      responses:
+        '200':
+          description: Solicitação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingRequestResponse'
+        '400':
+          description: ID inválido ou vaga já reservada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /parkings/{id}/cancel-request:
+    post:
+      tags:
+        - Estacionamento
+      summary: Cancelar uma solicitação de vaga
+      description: Cancela uma reserva de vaga e a torna disponível novamente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Solicitação cancelada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Solicitação de vaga cancelada com sucesso"
+        '400':
+          description: ID inválido ou vaga não está reservada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /condos/{condominiumId}/parkings:
+    get:
+      tags:
+        - Estacionamento
+      summary: Listar vagas de um condomínio
+      parameters:
+        - name: condominiumId
+          in: path
+          required: true
+          description: ID do condomínio
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de vagas do condomínio
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+          
+  /condos/{condominiumId}/apartments/{apartment}/parkings:
+    get:
+      tags:
+        - Estacionamento
+      summary: Listar vagas de um apartamento
+      parameters:
+        - name: condominiumId
+          in: path
+          required: true
+          description: ID do condomínio
+          schema:
+            type: integer
+        - name: apartment
+          in: path
+          required: true
+          description: Número do apartamento
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de vagas do apartamento
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+          
+  /residents/{residentId}/parkings:
+    get:
+      tags:
+        - Estacionamento
+      summary: Listar vagas de um residente
+      parameters:
+        - name: residentId
+          in: path
+          required: true
+          description: ID do residente
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de vagas do residente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+          
+  /residents/{residentId}/reserved-parkings:
+    get:
+      tags:
+        - Estacionamento
+      summary: Listar vagas reservadas por um residente
+      parameters:
+        - name: residentId
+          in: path
+          required: true
+          description: ID do residente
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de vagas reservadas pelo residente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Parking'
+        '500':
+          description: Erro interno do servidor
+    
+  /resident/me:
+    get:
+      tags:
+        - Residentes
+      summary: Obter informações do residente autenticado
+      description: Retorna dados do residente com base no token Firebase do usuário logado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Informações do residente retornadas com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResidentInfoResponse'
+        '401':
+          description: Token não fornecido ou inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Token de autenticação não fornecido'
+        '404':
+          description: Residente não encontrado para o usuário autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Residente não encontrado'
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                example:
+                  message: 'Erro ao buscar informações do residente'
+  
+  /notifications/test:
+      post:
+        tags:
+          - Notificações
+        summary: Enviar notificação de aluguel de vaga
+        description: Dispara uma notificação push padrão “Vaga Alugada!” para o token FCM informado, usando o spotId para compor o texto.
+        security:
+          - bearerAuth: []
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTestRequest'
+              examples:
+                teste:
+                  summary: Exemplo de envio
+                  value:
+                    token: "fZWiH0XtRn2-EpaAcBvvsb:APA91bHmJIeKUwdARXuDTSu_sPTdZK8gZEwn9Z"
+                    spotId: 401
+        responses:
+          '200':
+            description: Notificação enviada com sucesso
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/NotificationTestResponse'
+                examples:
+                  sucesso:
+                    summary: Resposta de sucesso
+                    value:
+                      success: true
+                      message: "Notificação enviada!"
+          '400':
+            description: Parâmetros inválidos na requisição
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+                examples:
+                  faltaParametros:
+                    summary: Token ou spotId ausentes
+                    value:
+                      message: "token e spotId são obrigatórios"
+          '401':
+            description: Token de autenticação não fornecido ou inválido
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+                examples:
+                  naoAutorizado:
+                    summary: Falha de autenticação
+                    value:
+                      message: "Token de autenticação inválido"
+          '500':
+            description: Erro interno ao enviar a notificação
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+                examples:
+                  erroServidor:
+                    summary: Exceção no servidor
+                    value:
+                      message: "Erro disparando notificação"
+
+  /parkings/{id}/rent:
+    post:
+      tags:
+        - Estacionamento
+      summary: Alugar uma vaga diretamente com notificação
+      description: Permite que um morador alugue uma vaga disponível diretamente. Usa a mesma lógica da rota /request mas envia notificação automática para o proprietário da vaga.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID da vaga
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                renter_id:
+                  type: integer
+                  description: ID do morador que está alugando a vaga
+              required:
+                - renter_id
+              example:
+                renter_id: 123
+      responses:
+        '200':
+          description: Vaga alugada com sucesso e proprietário notificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Vaga alugada com sucesso. O proprietário foi notificado."
+                  expiresAt:
+                    type: string
+                    format: date-time
+                    description: Data/hora de expiração da reserva
+                    example: "2025-06-30T18:00:00.000Z"
+        '400':
+          description: Dados inválidos, vaga não disponível ou já reservada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                vagaNaoDisponivel:
+                  summary: Vaga não está disponível
+                  value:
+                    message: "Vaga não está disponível"
+                renterIdObrigatorio:
+                  summary: Renter ID não fornecido
+                  value:
+                    message: "ID do locatário é obrigatório"
+                idInvalido:
+                  summary: ID da vaga inválido
+                  value:
+                    message: "ID da vaga deve ser um número válido"
+                vagaExpirada:
+                  summary: Vaga diária expirada
+                  value:
+                    message: "A data disponível da vaga já passou"
+                residenteNaoEncontrado:
+                  summary: Residente não encontrado
+                  value:
+                    message: "Residente não encontrado"
+        '404':
+          description: Vaga não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                vagaNaoEncontrada:
+                  summary: Vaga não encontrada
+                  value:
+                    message: "Vaga não encontrada"
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                erroInterno:
+                  summary: Erro interno
+                  value:
+                    message: "Erro interno do servidor"
+
+  /notifications/parking-rented:
+    post:
+      tags:
+        - Notificações
+      summary: Enviar notificação de vaga alugada
+      description: Envia uma notificação push específica para informar que uma vaga foi alugada
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ownerId:
+                  type: integer
+                  description: ID do proprietário da vaga que receberá a notificação
+                spotId:
+                  type: integer
+                  description: ID da vaga que foi alugada
+                renterName:
+                  type: string
+                  description: Nome completo da pessoa que alugou a vaga
+              required:
+                - ownerId
+                - spotId
+                - renterName
+              example:
+                ownerId: 456
+                spotId: 123
+                renterName: "João Silva"
+      responses:
+        '200':
+          description: Notificação de vaga alugada enviada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Notificação enviada com sucesso!"
+        '400':
+          description: Parâmetros obrigatórios não fornecidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                parametrosObrigatorios:
+                  summary: Parâmetros faltando
+                  value:
+                    error: "ownerId, spotId e renterName são obrigatórios"
+        '500':
+          description: Falha ao enviar notificação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                falhaNotificacao:
+                  summary: Erro ao enviar notificação
+                  value:
+                    error: "Falha ao enviar notificação"
+
+
+
+
