@@ -1,0 +1,17 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title C4 Context Diagram for Reside Condominium Management API
+
+Person(user, "User", "A person using the Reside Condominium Management application.")
+
+System(condominium_management_api, "Condominium Management API", "Provides API endpoints for managing condominiums, residents, visitors, events, and requests.")
+
+System(database, "PostgreSQL Database", "Stores data related to condominiums, residents, visitors, events, and requests.")
+
+System_Ext(swagger_ui, "Swagger UI", "Interactive API documentation.")
+
+Rel(user, condominium_management_api, "Uses")
+Rel(condominium_management_api, database, "Reads from and writes to")
+Rel(condominium_management_api, swagger_ui, "Serves API documentation to")
+@enduml

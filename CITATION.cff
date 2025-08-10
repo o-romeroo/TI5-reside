@@ -1,0 +1,31 @@
+cff-version: 1.0.1
+message: "Please cite this software using these metadata."
+title: "Reside"
+authors:
+  - family-names: Ramos Ferreira
+    given-names: Gabriel
+  - family-names: Romero Sales
+    given-names: João Vitor
+  - family-names: Silva Braga
+    given-names: João Pedro
+  - family-names: Randazzo
+    given-names: Lucas
+  - family-names: Alves Almeida Neto
+    given-names: Lúcio
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Martins Mol
+    given-names: Artur
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Vilela Cardoso
+    given-names: Leonardo
+keywords:
+  - Condominio
+  - Gestão Condominial
+  - Chatbot Condominial
+  - Feed Social Condominial
+repository-code: https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2025-1-ti5-reside
+license: "CC-BY-4.0"
+version: "1.0.0"
+date-released: 2025-06-24

@@ -1,0 +1,74 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title C4 Component Diagram for Reside Condominium Management API
+
+Container(api, "Reside Condominium Management API", "Node.js with Express", "Provides RESTful API endpoints for managing condominium data.")
+
+System_Ext(database, "PostgreSQL Database", "Stores data related to condominiums, residents, visitors, events, and requests.")
+
+Component(router, "API Router", "Express Router", "Routes incoming API requests to the appropriate controllers.")
+Component(condominium_controller, "Condominium Controller", "Node.js", "Handles requests related to condominiums.")
+Component(resident_controller, "Resident Controller", "Node.js", "Handles requests related to residents.")
+Component(visitor_controller, "Visitor Controller", "Node.js", "Handles requests related to visitors.")
+Component(event_controller, "Event Controller", "Node.js", "Handles requests related to events.")
+Component(request_controller, "Request Controller", "Node.js", "Handles requests related to requests.")
+Component(address_controller, "Address Controller", "Node.js", "Handles requests related to addresses.")
+
+
+Component(condominium_service, "Condominium Service", "Node.js", "Provides business logic for condominiums.")
+Component(resident_service, "Resident Service", "Node.js", "Provides business logic for residents.")
+Component(visitor_service, "Visitor Service", "Node.js", "Provides business logic for visitors.")
+Component(event_service, "Event Service", "Node.js", "Provides business logic for events.")
+Component(request_service, "Request Service", "Node.js", "Provides business logic for requests.")
+Component(address_service, "Address Service", "Node.js", "Provides business logic for addresses.")
+
+
+Component(condominium_repository, "Condominium Repository", "Node.js", "Handles data access for condominiums.")
+Component(resident_repository, "Resident Repository", "Node.js", "Handles data access for residents.")
+Component(visitor_repository, "Visitor Repository", "Node.js", "Handles data access for visitors.")
+Component(event_repository, "Event Repository", "Node.js", "Handles data access for events.")
+Component(request_repository, "Request Repository", "Node.js", "Handles data access for requests.")
+Component(address_repository, "Address Repository", "Node.js", "Handles data access for addresses.")
+
+
+Component(database_config, "Database Configuration", "Node.js", "Configures and initializes the database connection.")
+
+Rel(router, condominium_controller, "Routes requests to")
+Rel(router, resident_controller, "Routes requests to")
+Rel(router, visitor_controller, "Routes requests to")
+Rel(router, event_controller, "Routes requests to")
+Rel(router, request_controller, "Routes requests to")
+Rel(router, address_controller, "Routes requests to")
+
+
+Rel(condominium_controller, condominium_service, "Uses")
+Rel(resident_controller, resident_service, "Uses")
+Rel(visitor_controller, visitor_service, "Uses")
+Rel(event_controller, event_service, "Uses")
+Rel(request_controller, request_service, "Uses")
+Rel(address_controller, address_service, "Uses")
+
+
+Rel(condominium_service, condominium_repository, "Uses")
+Rel(resident_service, resident_repository, "Uses")
+Rel(visitor_service, visitor_repository, "Uses")
+Rel(event_service, event_repository, "Uses")
+Rel(request_service, request_repository, "Uses")
+Rel(address_service, address_repository, "Uses")
+
+
+Rel(condominium_repository, database, "Reads from and writes to")
+Rel(resident_repository, database, "Reads from and writes to")
+Rel(visitor_repository, database, "Reads from and writes to")
+Rel(event_repository, database, "Reads from and writes to")
+Rel(request_repository, database, "Reads from and writes to")
+Rel(address_repository, database, "Reads from and writes to")
+
+
+Rel(api, router, "Includes")
+Rel(api, database_config, "Uses")
+Rel(database_config, database, "Connects to")
+
+
+@enduml
